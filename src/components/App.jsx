@@ -17,6 +17,7 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [currImg, setCurrImg] = useState({});
+  const [totalPages, setTotalPages] = useState(0);
 
   const bottomRef = useRef(null);
   useEffect(() => {
@@ -40,7 +41,10 @@ const App = () => {
 
     api
       .getImages(imageQuery, page)
-      .then(results => results.hits)
+      .then(results => {
+        setTotalPages(Math.ceil(results.totalHits / 12));
+        return results.hits;
+      })
       .then(prevImages => {
         setImages([...images, ...prevImages]);
         setPage(prevPage => prevPage + 1);
@@ -85,8 +89,12 @@ const App = () => {
         <ImageGallery images={images} onOpenModal={toggleModal} />
       )}
 
-      {(images.length > 11) & (status !== 'pending') ? (
+      {(images.length > 11) & (status !== 'pending') & (page <= totalPages) ? (
         <LoadMoreButton onClick={fetchImages} />
+      ) : null}
+
+      {(page > totalPages) & (images.length > 11) ? (
+        <IntroductoryText>That's all ;)</IntroductoryText>
       ) : null}
 
       {showModal && (
