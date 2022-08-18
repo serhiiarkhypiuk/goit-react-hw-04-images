@@ -7,7 +7,7 @@ import { Button as LoadMoreButton } from './Button/Button';
 import { Div, IntroductoryText } from './SearchBar/Searchbar.styled';
 import Loader from './Loader/Loader';
 import ModalWindow from './Modal/Modal';
-import api from './services/services';
+import api from '../services/services';
 
 const App = () => {
   const [imageQuery, setImageQuery] = useState('');
